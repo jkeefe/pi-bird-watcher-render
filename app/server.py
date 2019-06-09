@@ -44,7 +44,7 @@ async def setup_learner():
         else:
             raise
 
-async def predict_this(image_data):
+def predict_this(image_data):
     
     # run the image data against the model
     lets_predict = learn.predict(image_data)
@@ -96,7 +96,8 @@ async def analyze(request):
     
     # send the image to my predictor function
     # and return the result whatever asked for it
-    return predict_this(img)
+    json_data = predict_this(img)
+    return json_data
 
 if __name__ == '__main__':
     if 'serve' in sys.argv:
