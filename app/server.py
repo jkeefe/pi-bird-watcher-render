@@ -4,7 +4,6 @@ import uvicorn
 import requests
 from fastai import *
 from fastai.vision import *
-from PIL import Image
 from io import BytesIO
 from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
@@ -114,7 +113,7 @@ async def checkurl(request):
     response = requests.get(url)
     
     # turn it into data
-    img = Image.open(BytesIO(response.content))
+    img = open_image(BytesIO(response.content))
     
     # send the image to my predictor function
     # and return the result whatever asked for it
