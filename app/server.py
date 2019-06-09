@@ -90,6 +90,7 @@ async def homepage(request):
 
 @app.route('/analyze', methods=['POST'])
 async def analyze(request):
+    # get the data from the form submission
     img_data = await request.form()
     img_bytes = await (img_data['file'].read())
     img = open_image(BytesIO(img_bytes))
@@ -98,6 +99,28 @@ async def analyze(request):
     # and return the result whatever asked for it
     json_data = predict_this(img)
     return json_data
+    
+    
+@app.route('/checkurl', methods=['POST'])
+async def checkurl(request):
+    # get the json request, ie:
+    # {"url":"https://example.com/someimage.jpg"}
+    incoming_json = await request.json()
+    
+    # pull out the url from that request
+    url = incoming_json["url"]
+
+    # get the image off the internet
+    response = requests.get(url)
+    
+    # turn it into data
+    img = Image.open(BytesIO(response.content))
+    
+    # send the image to my predictor function
+    # and return the result whatever asked for it
+    json_data = predict_this(img)
+    return json_data
+
 
 if __name__ == '__main__':
     if 'serve' in sys.argv:
