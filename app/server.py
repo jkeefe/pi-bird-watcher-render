@@ -1,8 +1,10 @@
 import aiohttp
 import asyncio
 import uvicorn
+import requests
 from fastai import *
 from fastai.vision import *
+from PIL import Image
 from io import BytesIO
 from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
@@ -42,25 +44,10 @@ async def setup_learner():
         else:
             raise
 
-
-loop = asyncio.get_event_loop()
-tasks = [asyncio.ensure_future(setup_learner())]
-learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
-loop.close()
-
-
-@app.route('/')
-async def homepage(request):
-    html_file = path / 'view' / 'index.html'
-    return HTMLResponse(html_file.open().read())
-
-
-@app.route('/analyze', methods=['POST'])
-async def analyze(request):
-    img_data = await request.form()
-    img_bytes = await (img_data['file'].read())
-    img = open_image(BytesIO(img_bytes))
-    lets_predict = learn.predict(img)
+async def predict_this(image_data):
+    
+    # run the image data against the model
+    lets_predict = learn.predict(image_data)
     
     # The best match is the first value in the prediction object
     best_match = lets_predict[0]
@@ -86,7 +73,30 @@ async def analyze(request):
         'confidence': float(confidence),
         'result': str(my_final_answer)
         })
+        
 
+
+loop = asyncio.get_event_loop()
+tasks = [asyncio.ensure_future(setup_learner())]
+learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
+loop.close()
+
+
+@app.route('/')
+async def homepage(request):
+    html_file = path / 'view' / 'index.html'
+    return HTMLResponse(html_file.open().read())
+
+
+@app.route('/analyze', methods=['POST'])
+async def analyze(request):
+    img_data = await request.form()
+    img_bytes = await (img_data['file'].read())
+    img = open_image(BytesIO(img_bytes))
+    
+    # send the image to my predictor function
+    # and return the result whatever asked for it
+    return predict_this(img)
 
 if __name__ == '__main__':
     if 'serve' in sys.argv:
