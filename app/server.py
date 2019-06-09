@@ -60,8 +60,32 @@ async def analyze(request):
     img_data = await request.form()
     img_bytes = await (img_data['file'].read())
     img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
-    return JSONResponse({'result': str(prediction)})
+    lets_predict = learn.predict(img)
+    
+    # The best match is the first value in the prediction object
+    best_match = lets_predict[0]
+    
+    # The category is the second value in the prediction object
+    # which we turn into a number with .item()
+    cat_number = lets_predict[1].item()
+    
+    # A tensor with all of the confidence levels is the third value in the object
+    predictions = lets_predict[2]
+
+    # Here I pluck the cat_number'th value from the predictions tensor
+    # and make it a number with .item()
+    confidence = predictions[cat_number].item()
+    
+    if confidence > 0.85:
+        my_final_answer = best_match
+    else:
+        my_final_answer = "uncertain"
+    
+    return JSONResponse({
+        'best_match': best_match,
+        'confidence': confidence,
+        'result': str(my_final_answer)
+        })
 
 
 if __name__ == '__main__':
