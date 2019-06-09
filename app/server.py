@@ -82,8 +82,8 @@ async def analyze(request):
         my_final_answer = "uncertain"
     
     return JSONResponse({
-        'best_match': best_match,
-        'confidence': confidence,
+        'best_match': str(best_match),
+        'confidence': float(confidence),
         'result': str(my_final_answer)
         })
 
