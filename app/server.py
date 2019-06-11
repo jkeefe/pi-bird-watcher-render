@@ -78,7 +78,7 @@ def predict_this(image_data):
     
     return JSONResponse({
         'best_match': str(best_match),
-        'confidence': float(confidence),
+        'confidence': round(float(confidence),3),
         'result': str(my_final_answer)
         })
         
