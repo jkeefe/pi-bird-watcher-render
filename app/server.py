@@ -3,6 +3,7 @@ import asyncio
 import uvicorn
 import requests
 import random
+import re
 from fastai import *
 from fastai.vision import *
 from io import BytesIO
@@ -82,9 +83,13 @@ def predict_this(image_data):
     confidence = predictions[cat_number].item()
     
     if confidence > 0.91:
-        my_final_answer = best_match
+        # lop off the final digit if there is one,
+        # for example 'wallofsound' and 'wallofsound2' should return 'wallofsound'
+        my_final_answer = re.sub(r'(.*)\d$', r'\1', best_match)
     else:
         my_final_answer = "uncertain"
+        
+    
     
     response_dict = {
         'best_match': str(best_match),
