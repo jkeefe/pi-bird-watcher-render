@@ -78,11 +78,13 @@ def predict_this(image_data):
     else:
         my_final_answer = "uncertain"
     
-    return JSONResponse({
+    response_dict = {
         'best_match': str(best_match),
         'confidence': round(float(confidence),3),
         'result': str(my_final_answer)
-        })
+        }
+    
+    return response_dict
         
 def slack_this(data, image_url):
     
@@ -127,8 +129,8 @@ async def analyze(request):
     
     # send the image to my predictor function
     # and return the result whatever asked for it
-    json_data = predict_this(img)
-    return json_data
+    data_dict = predict_this(img)
+    return JSONResponse(data_dict)
     
     
 @app.route('/checkurl', methods=['POST'])
@@ -148,9 +150,9 @@ async def checkurl(request):
     
     # send the image to my predictor function
     # and return the result whatever asked for it
-    json_data = predict_this(img)
-    slack_this(json_data, url)
-    return json_data
+    data_dict = predict_this(img)
+    slack_this(data_dict, url)
+    return JSONResponse(data_dict)
 
 
 if __name__ == '__main__':
