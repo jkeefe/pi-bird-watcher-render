@@ -69,7 +69,7 @@ def predict_this(image_data):
     lets_predict = learn.predict(image_data)
     
     # The best match is the first value in the prediction object
-    best_match = lets_predict[0]
+    best_match = str(lets_predict[0])
     
     # The category is the second value in the prediction object
     # which we turn into a number with .item()
