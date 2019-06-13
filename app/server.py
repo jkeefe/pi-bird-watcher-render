@@ -23,7 +23,7 @@ classes = ['blowup',
  'wallofsound',
  'wallofsound2'] # Update the classes here
  
-slack_webhook_url = os.getenv(SLACK_WEBHOOK)
+slack_webhook_url = os.getenv("SLACK_WEBHOOK")
  
 path = Path(__file__).parent
 
