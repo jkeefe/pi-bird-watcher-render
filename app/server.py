@@ -96,7 +96,7 @@ def slack_this(data, image_url):
         'attachments': [
             {
                 'color': message_color,
-                'footer': `*Best Match* {data['best_match']}\n *Confidence*  {data['confidence']}`
+                'footer': f"*Best Match*: {data['best_match']}\n *Confidence*: {data['confidence']}"
             }
         ]
     }
