@@ -104,7 +104,7 @@ def slack_this(data, image_url):
     phrase = random.choice(slack_intro_phrases)
         
     slack_json = {
-        'text': f"{phrase} *{data['result']}*\n{image_url}.",
+        'text': f"{phrase} *{data['result']}*.\n{image_url}",
         'attachments': [
             {
                 'color': message_color,
