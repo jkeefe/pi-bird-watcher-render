@@ -81,7 +81,7 @@ def predict_this(image_data):
     # and make it a number with .item()
     confidence = predictions[cat_number].item()
     
-    if confidence > 0.95:
+    if confidence > 0.91:
         my_final_answer = best_match
     else:
         my_final_answer = "uncertain"
@@ -104,7 +104,7 @@ def slack_this(data, image_url):
     phrase = random.choice(slack_intro_phrases)
         
     slack_json = {
-        'text': f"{phrase} *{data['result']}*.\n{image_url}",
+        'text': f"{image_url}\n{phrase} *{data['result']}*.",
         'attachments': [
             {
                 'color': message_color,
