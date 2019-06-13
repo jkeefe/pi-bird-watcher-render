@@ -6,7 +6,9 @@ Do:
 
 `pip install package && pip freeze > requirements.txt`
 
-## Adding a .env file for Python
+## Adding an environment variable
 
 This looks pretty cool: https://github.com/theskumar/python-dotenv
+
+But instead, I set the SLACK_WEBHOOK environment variable directly inside Render.
 

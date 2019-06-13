@@ -22,7 +22,9 @@ classes = ['blowup',
  'starwall',
  'wallofsound',
  'wallofsound2'] # Update the classes here
-
+ 
+slack_webhook_url = os.getenv(SLACK_WEBHOOK)
+ 
 path = Path(__file__).parent
 
 app = Starlette()
@@ -82,6 +84,26 @@ def predict_this(image_data):
         'result': str(my_final_answer)
         })
         
+def slack_this(data, image_url):
+    
+    if data['result'] == 'uncertain':
+        message_color = "#cc0000" # red
+    else:
+        message_color = "#009933" # green
+        
+    slack_json = {
+        'text': f"Processed this image as *{data['result']}*: {image_url}",
+        'attachments': [
+            {
+                'color': message_color,
+                'footer': `*Best Match* {data['best_match']}\n *Confidence*  {data['confidence']}`
+            }
+        ]
+    }
+    
+    r = requests.post(slack_webhook_url, json=slack_json)
+    print(f"Sent to Slack. Response: {r.status_code}") 
+    return
 
 
 loop = asyncio.get_event_loop()
@@ -127,6 +149,7 @@ async def checkurl(request):
     # send the image to my predictor function
     # and return the result whatever asked for it
     json_data = predict_this(img)
+    slack_this(json_data, url)
     return json_data
 
 
