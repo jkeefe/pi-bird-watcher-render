@@ -2,6 +2,7 @@ import aiohttp
 import asyncio
 import uvicorn
 import requests
+import random
 from fastai import *
 from fastai.vision import *
 from io import BytesIO
@@ -24,6 +25,13 @@ classes = ['blowup',
  'wallofsound2'] # Update the classes here
  
 slack_webhook_url = os.getenv("SLACK_WEBHOOK")
+slack_intro_phrases = [
+    "I think this is", 
+    "I replied that this was", 
+    "My response to this photo was", 
+    "My computer brain says this is", 
+    "According to me, this is", 
+    "I'd call this"]
  
 path = Path(__file__).parent
 
@@ -73,7 +81,7 @@ def predict_this(image_data):
     # and make it a number with .item()
     confidence = predictions[cat_number].item()
     
-    if confidence > 0.85:
+    if confidence > 0.95:
         my_final_answer = best_match
     else:
         my_final_answer = "uncertain"
@@ -93,12 +101,14 @@ def slack_this(data, image_url):
     else:
         message_color = "#009933" # green
         
+    phrase = random.choice(slack_intro_phrases)
+        
     slack_json = {
-        'text': f"Processed this image as *{data['result']}*: {image_url}",
+        'text': f"{phrase} *{data['result']}*\n{image_url}.",
         'attachments': [
             {
                 'color': message_color,
-                'footer': f"*Best Match*: {data['best_match']}\n *Confidence*: {data['confidence']}"
+                'footer': f"*Confidence*: {data['confidence']}\n*Closest Match*: {data['best_match']}\n "
             }
         ]
     }
