@@ -12,10 +12,9 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-export_file_url = 'https://qz-aistudio-public.s3.amazonaws.com/rosebot/export-june14.pkl'  # Update this URL
-export_file_name = 'export-june14.pkl'
+export_file_url = 'https://qz-aistudio-public.s3.amazonaws.com/rosebot/export-jun19.pkl'  # Update this URL
+export_file_name = 'export-jun19.pkl'
 classes = ['blowup',
- 'blowup2',
  'dumbwaiter',
  'flag',
  'haring',
