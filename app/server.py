@@ -82,7 +82,7 @@ def predict_this(image_data):
     # and make it a number with .item()
     confidence = predictions[cat_number].item()
     
-    if confidence > 0.91:
+    if confidence > 0.71:
         # lop off the final digit if there is one,
         # for example 'wallofsound' and 'wallofsound2' should return 'wallofsound'
         my_final_answer = re.sub(r'(.*)\d$', r'\1', best_match)
