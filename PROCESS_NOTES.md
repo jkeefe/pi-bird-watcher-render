@@ -16,20 +16,17 @@ But instead, I set the SLACK_WEBHOOK environment variable directly inside Render
 
 The version of fastai (and torch, torchvision & numpy) I used when training the model need to match the versions used when running the model. 
 
-In the google colab notebook where I built the model for this project, I ran:
+After more messing with the requirements.txt file, I finally just added `pip install fastai` to the Docker file.
+
+Just noting here for reference that the log files indicate the following torches are installed
 
 ```
-!pip freeze > requirements.txt
-!cat requirements.txt
+torch-1.5.0-cp37-cp37m-manylinux1_x86_64.whl
+torchvision-0.6.0-cp37-cp37m-manylinux1_x86_64.whl
 ```
 
-Then I took a look at the generated `requirements.txt` file and updated the version numbers for any package there that matched a line in the `requirements.txt` file in this repo:
+Also noting that it says it's intstalling `... torch-1.5.0 torchvision-0.6.0 ...`
 
-```
-fastai==1.0.61
-torch==1.5.0+cu101
-torchvision==0.6.0+cu101
-numpy==1.18.4
-```
+
 
 
