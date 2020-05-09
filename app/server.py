@@ -12,27 +12,23 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-export_file_url = 'https://qz-aistudio-public.s3.amazonaws.com/rosebot/export-jun19.pkl'  # Update this URL
-export_file_name = 'export-jun19.pkl'
-classes = ['blowup',
- 'dumbwaiter',
- 'flag',
- 'haring',
- 'pipes',
- 'pool',
- 'pool2',
- 'starwall',
- 'wallofsound',
- 'wallofsound2'] # Update the classes here
+# Update the location of the pkl file
+export_file_url = 'https://s3.amazonaws.com/media.johnkeefe.net/pi-bird-watcher/export-16pct.pkl'  # Update this URL
+
+# Update the name of the pkl file
+export_file_name = 'export-16pct.pkl'
+
+# Update the classes here
+classes = ['Acadian Flycatcher', 'American Crow', 'American Goldfinch', 'American Pipit', 'American Redstart', 'American Three Toed Woodpecker', 'Anna Hummingbird', 'Artic Tern', 'Baird Sparrow', 'Baltimore Oriole', 'Bank Swallow', 'Barn Swallow', 'Bay Breasted Warbler', 'Belted Kingfisher', 'Bewick Wren', 'Black And White Warbler', 'Black Billed Cuckoo', 'Black Capped Vireo', 'Black Footed Albatross', 'Black Tern', 'Black Throated Blue Warbler', 'Black Throated Sparrow', 'Blue Grosbeak', 'Blue Headed Vireo', 'Blue Jay', 'Blue Winged Warbler', 'Boat Tailed Grackle', 'Bobolink', 'Bohemian Waxwing', 'Brandt Cormorant', 'Brewer Blackbird', 'Brewer Sparrow', 'Bronzed Cowbird', 'Brown Creeper', 'Brown Pelican', 'Brown Thrasher', 'Cactus Wren', 'California Gull', 'Canada Warbler', 'Cape Glossy Starling', 'Cape May Warbler', 'Cardinal', 'Carolina Wren', 'Caspian Tern', 'Cedar Waxwing', 'Cerulean Warbler', 'Chestnut Sided Warbler', 'Chipping Sparrow', 'Chuck Will Widow', 'Clark Nutcracker', 'Clay Colored Sparrow', 'Cliff Swallow', 'Common Raven', 'Common Tern', 'Common Yellowthroat', 'Crested Auklet', 'Dark Eyed Junco', 'Downy Woodpecker', 'Eared Grebe', 'Eastern Towhee', 'Elegant Tern', 'European Goldfinch', 'Evening Grosbeak', 'Field Sparrow', 'Fish Crow', 'Florida Jay', 'Forsters Tern', 'Fox Sparrow', 'Frigatebird', 'Gadwall', 'Geococcyx', 'Glaucous Winged Gull', 'Golden Winged Warbler', 'Grasshopper Sparrow', 'Gray Catbird', 'Gray Crowned Rosy Finch', 'Gray Kingbird', 'Great Crested Flycatcher', 'Great Grey Shrike', 'Green Jay', 'Green Kingfisher', 'Green Tailed Towhee', 'Green Violetear', 'Groove Billed Ani', 'Harris Sparrow', 'Heermann Gull', 'Henslow Sparrow', 'Herring Gull', 'Hooded Merganser', 'Hooded Oriole', 'Hooded Warbler', 'Horned Grebe', 'Horned Lark', 'Horned Puffin', 'House Sparrow', 'House Wren', 'Indigo Bunting', 'Ivory Gull', 'Kentucky Warbler', 'Laysan Albatross', 'Lazuli Bunting', 'Le Conte Sparrow', 'Least Auklet', 'Least Flycatcher', 'Least Tern', 'Lincoln Sparrow', 'Loggerhead Shrike', 'Long Tailed Jaeger', 'Louisiana Waterthrush', 'Magnolia Warbler', 'Mallard', 'Mangrove Cuckoo', 'Marsh Wren', 'Mockingbird', 'Mourning Warbler', 'Myrtle Warbler', 'Nashville Warbler', 'Nelson Sharp Tailed Sparrow', 'Nighthawk', 'Northern Flicker', 'Northern Fulmar', 'Northern Waterthrush', 'Olive Sided Flycatcher', 'Orange Crowned Warbler', 'Orchard Oriole', 'Ovenbird', 'Pacific Loon', 'Painted Bunting', 'Palm Warbler', 'Parakeet Auklet', 'Pelagic Cormorant', 'Philadelphia Vireo', 'Pied Billed Grebe', 'Pied Kingfisher', 'Pigeon Guillemot', 'Pileated Woodpecker', 'Pine Grosbeak', 'Pine Warbler', 'Pomarine Jaeger', 'Prairie Warbler', 'Prothonotary Warbler', 'Purple Finch', 'Red Bellied Woodpecker', 'Red Breasted Merganser', 'Red Cockaded Woodpecker', 'Red Eyed Vireo', 'Red Faced Cormorant', 'Red Headed Woodpecker', 'Red Legged Kittiwake', 'Red Winged Blackbird', 'Rhinoceros Auklet', 'Ring Billed Gull', 'Ringed Kingfisher', 'Rock Wren', 'Rose Breasted Grosbeak', 'Ruby Throated Hummingbird', 'Rufous Hummingbird', 'Rusty Blackbird', 'Sage Thrasher', 'Savannah Sparrow', 'Sayornis', 'Scarlet Tanager', 'Scissor Tailed Flycatcher', 'Scott Oriole', 'Seaside Sparrow', 'Shiny Cowbird', 'Slaty Backed Gull', 'Song Sparrow', 'Sooty Albatross', 'Spotted Catbird', 'Summer Tanager', 'Swainson Warbler', 'Tennessee Warbler', 'Tree Sparrow', 'Tree Swallow', 'Tropical Kingbird', 'Vermilion Flycatcher', 'Vesper Sparrow', 'Warbling Vireo', 'Western Grebe', 'Western Gull', 'Western Meadowlark', 'Western Wood Pewee', 'Whip Poor Will', 'White Breasted Kingfisher', 'White Breasted Nuthatch', 'White Crowned Sparrow', 'White Eyed Vireo', 'White Necked Raven', 'White Pelican', 'White Throated Sparrow', 'Wilson Warbler', 'Winter Wren', 'Worm Eating Warbler', 'Yellow Bellied Flycatcher', 'Yellow Billed Cuckoo', 'Yellow Breasted Chat', 'Yellow Headed Blackbird', 'Yellow Throated Vireo', 'Yellow Warbler']
+ # Update the classes here
  
 slack_webhook_url = os.getenv("SLACK_WEBHOOK")
 slack_intro_phrases = [
-    "I think this is", 
-    "I replied that this was", 
-    "My response to this photo was", 
-    "My computer brain says this is", 
-    "According to me, this is", 
-    "I'd call this"]
+    "I think this is a", 
+    "That looks like a", 
+    "My computer brain says this is a", 
+    "According to me, this is a", 
+    "I'd call this a"]
  
 path = Path(__file__).parent
 
@@ -83,13 +79,10 @@ def predict_this(image_data):
     confidence = predictions[cat_number].item()
     
     if confidence > 0.71:
-        # lop off the final digit if there is one,
-        # for example 'wallofsound' and 'wallofsound2' should return 'wallofsound'
-        my_final_answer = re.sub(r'(.*)\d$', r'\1', best_match)
+        my_final_answer = best_match
     else:
         my_final_answer = "uncertain"
         
-    
     
     response_dict = {
         'best_match': str(best_match),
