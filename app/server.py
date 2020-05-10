@@ -102,13 +102,7 @@ def slack_this(data, image_url):
     phrase = random.choice(slack_intro_phrases)
         
     slack_json = {
-        'text': f"{image_url}\n{phrase} *{data['result']}*.",
-        'attachments': [
-            {
-                'color': message_color,
-                'footer': f"*Confidence*: {data['confidence']}\n*Closest Match*: {data['best_match']}"
-            }
-        ]
+        'text': f"{image_url}\n{phrase} *{data['result']}*. The best guess is {data['best_match']} with a confidence of {data['confidence']}."
     }
     
     r = requests.post(slack_webhook_url, json=slack_json)
